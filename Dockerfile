@@ -32,6 +32,7 @@ RUN apt-get -qq update && apt-get -qq dist-upgrade && apt-get install -qq -y --n
     libdbus-1-3 \
     gcc \
     g++ \
+    cmake \
     openjdk-8-jdk \
     openjdk-8-jdk-headless \
     && apt-get -qq clean
