@@ -41,6 +41,7 @@ COPY extract-qt-installer.sh /tmp/qt/
 
 # Download & unpack Qt 5.6 toolchains & clean
 RUN curl -Lo /tmp/qt/installer.run 'http://download.qt-project.org/official_releases/qt/${QT_VERSION}/${QT_VERSION}.1/qt-opensource-linux-x64-${QT_VERSION}.1.run' \
+    && chmod +x extract-qt-installer.sh \
     && QT_CI_PACKAGES=qt.56.gcc_64 /tmp/qt/extract-qt-installer.sh /tmp/qt/installer.run "$QT_PATH" \
     && find "$QT_PATH" -mindepth 1 -maxdepth 1 ! -name '5.*' -exec echo 'Cleaning Qt SDK: {}' \; -exec rm -r '{}' \; \
     && rm -rf /tmp/qt
