@@ -1,10 +1,10 @@
 FROM ubuntu:16.04
 MAINTAINER Blueapple <blueapple1120@qq.com>
 
-ENV QT_VERSION=5.6
+ENV QT_VERSION=5.7
 ENV DEBIAN_FRONTEND noninteractive
 ENV QT_PATH /opt/Qt
-ENV QT_DESKTOP $QT_PATH/5.6/gcc_64
+ENV QT_DESKTOP $QT_PATH/5.7/gcc_64
 ENV PATH $QT_DESKTOP/bin:$PATH
 
 # Install updates & requirements:
@@ -37,12 +37,12 @@ RUN apt-get -qq update && apt-get -qq dist-upgrade && apt-get install -qq -y --n
     openjdk-8-jdk-headless \
     && apt-get -qq clean
 
-COPY extract-qt-installer.sh /tmp/qt/
+COPY extract-qt-installer.sh /tmp/qt/ \
+    && chmod +x extract-qt-installer.sh
 
-# Download & unpack Qt 5.6 toolchains & clean
+# Download & unpack Qt 5.7 toolchains & clean
 RUN curl -Lo /tmp/qt/installer.run 'http://download.qt-project.org/official_releases/qt/${QT_VERSION}/${QT_VERSION}.1/qt-opensource-linux-x64-${QT_VERSION}.1.run' \
-    && chmod +x extract-qt-installer.sh \
-    && QT_CI_PACKAGES=qt.56.gcc_64 /tmp/qt/extract-qt-installer.sh /tmp/qt/installer.run "$QT_PATH" \
+    && QT_CI_PACKAGES=qt.57.gcc_64 /tmp/qt/extract-qt-installer.sh /tmp/qt/installer.run "$QT_PATH" \
     && find "$QT_PATH" -mindepth 1 -maxdepth 1 ! -name '5.*' -exec echo 'Cleaning Qt SDK: {}' \; -exec rm -r '{}' \; \
     && rm -rf /tmp/qt
 
