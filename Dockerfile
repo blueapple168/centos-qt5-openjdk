@@ -19,5 +19,9 @@ RUN yum -y update \
         && rm -rf /var/cache/yum \
         && wget http://download.qt.io/official_releases/qt/5.6/5.6.1/qt-opensource-linux-x64-5.6.1.run -P /home/ \
         && chmod +x /home/qt-unified-linux-x64-online.run
+        
+# Set java environment
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk.x86_64
+ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/jre/bin:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin
 
 ENTRYPOINT /bin/bash
