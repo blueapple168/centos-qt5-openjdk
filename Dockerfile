@@ -3,6 +3,7 @@ MAINTAINER Blueapple <blueapple1120@qq.com>
 
 #Installing Developement tools
 #Installing gcc openjdk
+USER root
 RUN yum -y update \
         && yum group -y install "Development Tools" \
         && yum -y install centos-release-scl-rh \
