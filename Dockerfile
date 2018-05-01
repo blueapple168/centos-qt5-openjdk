@@ -1,52 +1,22 @@
-# Minimal docker container to build project
-# Image: rabits/qt:5.7-desktop
+FROM centos:7
+MAINTAINER Blueapple <blueapple1120@qq.com>
 
-FROM ubuntu:16.04
-MAINTAINER Rabit <home@rabits.org> (@rabits)
+#Installing Developement tools
+#Installing gcc openjdk
+RUN yum -y update \
+        && yum group -y install "Development Tools" \
+        && yum -y install centos-release-scl-rh \
+        && yum -y --enablerepo=centos-sclo-rh-testing install devtoolset-7-gcc devtoolset-7-gcc-c++ \
+        && scl enable devtoolset-7 bash \
+        && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+        && yum -y install botan wget clucene09-core glx-utils mesa-libGLES \
+        gstreamer-plugins-base libX11 libXrender libXi libXfixes libXext libxslt qt-x11 \
+        libxkbcommon libxcb xcb-util-image xcb-util-keysyms xcb-util-renderutil \
+        xcb-util-wm freetype fontconfig git epel-release \
+        && yum -y install mosquitto cmake \
+        && yum -y install java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64 \
+        && rm -rf /var/cache/yum \
+        && wget http://download.qt.io/official_releases/qt/5.6/5.6.1/qt-opensource-linux-x64-5.6.1.run -P /home/ \
+        && chmod +x /home/qt-unified-linux-x64-online.run
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV QT_PATH /opt/Qt
-ENV QT_DESKTOP $QT_PATH/5.7/gcc_64
-ENV PATH $QT_DESKTOP/bin:$PATH
-
-# Install updates & requirements:
-#  * git, openssh-client, ca-certificates - clone & build
-#  * locales, sudo - useful to set utf-8 locale & sudo usage
-#  * curl - to download Qt bundle
-#  * build-essential, pkg-config, libgl1-mesa-dev - basic Qt build requirements
-#  * libsm6, libice6, libxext6, libxrender1, libfontconfig1, libdbus-1-3 - dependencies of the Qt bundle run-file
-RUN apt-get -qq update && apt-get -qq dist-upgrade && apt-get install -qq -y --no-install-recommends \
-    git \
-    openssh-client \
-    ca-certificates \
-    locales \
-    sudo \
-    curl \
-    build-essential \
-    pkg-config \
-    libgl1-mesa-dev \
-    libsm6 \
-    libice6 \
-    libxext6 \
-    libxrender1 \
-    libfontconfig1 \
-    libdbus-1-3 \
-    && apt-get -qq clean
-
-COPY extract-qt-installer.sh /tmp/qt/
-
-# Download & unpack Qt 5.7 toolchains & clean
-RUN curl -Lo /tmp/qt/installer.run 'http://mirror.bit.edu.cn/qtproject/archive/qt/5.7/5.7.1/qt-opensource-linux-x64-5.7.1.run' \
-    && QT_CI_PACKAGES=qt.57.gcc_64 /tmp/qt/extract-qt-installer.sh /tmp/qt/installer.run "$QT_PATH" \
-    && find "$QT_PATH" -mindepth 1 -maxdepth 1 ! -name '5.*' -exec echo 'Cleaning Qt SDK: {}' \; -exec rm -r '{}' \; \
-    && rm -rf /tmp/qt
-
-# Reconfigure locale
-RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
-
-# Add group & user + sudo
-RUN groupadd -r user && useradd --create-home --gid user user && echo 'user ALL=NOPASSWD: ALL' > /etc/sudoers.d/user
-
-USER user
-WORKDIR /home/user
-ENV HOME /home/user
+ENTRYPOINT /bin/bash
