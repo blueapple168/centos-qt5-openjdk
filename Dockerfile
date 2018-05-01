@@ -1,5 +1,9 @@
+# Minimal docker container to build project
+# Image: rabits/qt:5.7-desktop
+
 FROM ubuntu:16.04
-MAINTAINER Blueapple <blueapple1120@qq.com>
+MAINTAINER Rabit <home@rabits.org> (@rabits)
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV QT_PATH /opt/Qt
 ENV QT_DESKTOP $QT_PATH/5.7/gcc_64
