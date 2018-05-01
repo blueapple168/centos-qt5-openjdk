@@ -1,6 +1,5 @@
 FROM ubuntu:16.04
 MAINTAINER Blueapple <blueapple1120@qq.com>
-
 ENV DEBIAN_FRONTEND noninteractive
 ENV QT_PATH /opt/Qt
 ENV QT_DESKTOP $QT_PATH/5.7/gcc_64
@@ -12,7 +11,6 @@ ENV PATH $QT_DESKTOP/bin:$PATH
 #  * curl - to download Qt bundle
 #  * build-essential, pkg-config, libgl1-mesa-dev - basic Qt build requirements
 #  * libsm6, libice6, libxext6, libxrender1, libfontconfig1, libdbus-1-3 - dependencies of the Qt bundle run-file
-#  * openjdk, gcc, cmake
 RUN apt-get -qq update && apt-get -qq dist-upgrade && apt-get install -qq -y --no-install-recommends \
     git \
     openssh-client \
@@ -29,11 +27,6 @@ RUN apt-get -qq update && apt-get -qq dist-upgrade && apt-get install -qq -y --n
     libxrender1 \
     libfontconfig1 \
     libdbus-1-3 \
-    gcc \
-    g++ \
-    cmake \
-    openjdk-8-jdk \
-    openjdk-8-jdk-headless \
     && apt-get -qq clean
 
 COPY extract-qt-installer.sh /tmp/qt/
@@ -46,10 +39,6 @@ RUN curl -Lo /tmp/qt/installer.run 'http://download.qt-project.org/official_rele
 
 # Reconfigure locale
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
-
-# Set environment
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-ENV PATH $PATH:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin
 
 # Add group & user + sudo
 RUN groupadd -r user && useradd --create-home --gid user user && echo 'user ALL=NOPASSWD: ALL' > /etc/sudoers.d/user
