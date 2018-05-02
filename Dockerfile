@@ -16,9 +16,9 @@ RUN yum -y update \
         && rm -rf /var/cache/yum \
         && rm -rf /var/tmp/* \
         && rm -rf /tmp/*
-# Set java environment
+# Set java qt environment
+ENV QT_HOME /usr/lib64/qt5
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk.x86_64
-ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/jre/bin:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin
-ENV QT_PATH /usr/lib64/qt5/bin
+ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/jre/bin:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin:/usr/lib64/qt5/bin
 
 ENTRYPOINT /bin/bash
