@@ -19,5 +19,6 @@ RUN yum -y update \
 # Set java environment
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk.x86_64
 ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/jre/bin:/usr/lib/jvm/java-1.8.0-openjdk.x86_64/bin
+ENV QT_PATH /usr/lib64/qt5/bin
 
 ENTRYPOINT /bin/bash
